@@ -12,8 +12,6 @@ struct Ht_item{
 	char* value;
 };
 
-// define what hashtable is
-
 typedef struct HashTable HashTable;
 
 struct HashTable{
