@@ -53,7 +53,7 @@ def featImpMDA(clf,X,y,cv,sample_weight,t1,pctEmbargo,scoring='neg_log_loss'):
         raise ValueError('wrong scoring method.')
     from sklearn.metrics import log_loss, accuracy_score
     cvGen=PurgedKFold(n_splits=cv,t1=t1,pctEmbargo=pctEmbargo) # purged cv
-    scr0,scr1=pd.SEries(), pd.DataFrame(columns=X.columns)
+    scr0,scr1=pd.Series(), pd.DataFrame(columns=X.columns)
 
     for i,(train,test) in enumerate(cvGen.split(X=X)):
         X0,y0,w0=X.iloc[train,:],y.iloc[train],sample_weight.iloc[train]
