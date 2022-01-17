@@ -25,6 +25,7 @@ import warnings
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore",category=DeprecationWarning)
     import pandas as pd
+    from joblib import parallel_backend
     import numpy as np
     import xgboost as xgb
     from sklearn.model_selection import cross_val_score, cross_val_predict
@@ -133,8 +134,8 @@ XGbBO = BayesianOptimization(XGbcv, {'max_depth': (3, 10),
                                      'colsample_bytree' :(0.05, 0.4)
                                     })
 
-
-XGbBO.maximize(init_points=10, n_iter=1, acq="ei", xi=0.01)
+with parallel_backend('multiprocessing'):
+    XGbBO.maximize(init_points=10, n_iter=1, acq="ei", xi=0.01)
 # init points = how many steps of random exploration you want
 # n_iter = how many steps of BO you want
 
@@ -179,4 +180,4 @@ except:
     pickle.dump(xgbr, open('bayesopt_xgbr.pkl','wb'))
 spinner.succeed()
 end = time.time()
-print('code took ',(end-start)/60,' s to run')
+print('code took ',(end-start)/60,'min to run')
