@@ -1,10 +1,3 @@
-
-
-############################3
-# this code takes FOREVER to run, need to figure out why
-############################
-
-
 from __future__ import print_function
 from __future__ import division
 import time
@@ -160,14 +153,16 @@ paramt = {'booster' : 'gbtree', 'max_depth' : max_depth.astype(int), 'gamma' : g
 
 folds = 5
 spinner.start('training model w/ optimal params...')
-xgbr = xgb.train(paramt, dtrain, num_boost_round=int(ITERbest*(1+(1/folds))))
+with parallel_backend('multiprocessing'):
+    xgbr = xgb.train(paramt, dtrain, num_boost_round=int(ITERbest*(1+(1/folds))))
 spinner.succeed()
 
 ######################################################
 # V. predict on validation data w/ optimal parameters
 ######################################################
 spinner.start('predicting on validation data w/ optimal params...')
-pred = xgbr.predict(dval)
+with parallel_backend('multiprocessing'):
+    pred = xgbr.predict(dval)
 mse = ((y_val - pred)**2).mean(axis=0)
 spinner.succeed()
 print('model mse is: ', mse)
